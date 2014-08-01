@@ -1,0 +1,14 @@
+OASISFormat: 0.4
+Name:        albot
+Version:     0.0.0
+Synopsis:    The extensible OCaml IRC bot
+Authors:     Si Beaumont
+License:     ISC
+Plugins:     META (0.4), DevFiles (0.4)
+
+Executable albot
+  CompiledObject:   best
+  Path:             src
+  BuildTools:       ocamlbuild
+  MainIs:           albot.ml
+  BuildDepends:     lwt, irc-client.lwt
