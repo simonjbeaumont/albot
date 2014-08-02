@@ -17,7 +17,7 @@ let callback ~connection ~result =
 
 let dump_conf c = Lwt_io.printlf "Running with config: %s" (Config.string_of c)
 
-let main config =
+let start config =
   dump_conf config >>= fun () ->
   let {Config_t.server; port; username; password; channel; nick; realname} =
     config
@@ -30,6 +30,4 @@ let main config =
     Irc.send_join ~connection ~channel >>= fun () ->
     Irc.listen ~connection ~callback
 
-let () =
-  let config = Config.of_file "albotrc.example" in
-  Lwt_main.run (main config)
+let run config = Lwt_main.run (start config)

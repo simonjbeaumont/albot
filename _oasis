@@ -15,7 +15,7 @@ PreCleanCommand:  atdgen -list src/config.atd | xargs rm -rf
 Executable albot
   CompiledObject:   best
   Path:             src
-  MainIs:           albot.ml
-  BuildDepends:     lwt, irc-client.lwt, atdgen
+  MainIs:           main.ml
+  BuildDepends:     lwt, irc-client.lwt, atdgen, cmdliner
   ByteOpt:          -bin-annot
   NativeOpt:        -bin-annot

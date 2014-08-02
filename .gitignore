@@ -1,5 +1,5 @@
 _build/
-albot.native
+main.native
 setup.data
 setup.log
 config_*.ml*
