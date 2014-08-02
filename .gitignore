@@ -2,3 +2,4 @@ _build/
 albot.native
 setup.data
 setup.log
+config_*.ml*
