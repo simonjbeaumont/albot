@@ -1,0 +1,8 @@
+{
+  "server": "irc.freenode.net",
+  "port": 6667,
+  "username": "albot_",
+  "channel": "#albot",
+  "nick": "albot_",
+  "realname": "Albot, the friendly OCaml IRC bot"
+}

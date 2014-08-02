@@ -31,5 +31,5 @@ let main config =
     Irc.listen ~connection ~callback
 
 let () =
-  let config = Config.default () in
+  let config = Config.of_file "albotrc.example" in
   Lwt_main.run (main config)
