@@ -5,7 +5,7 @@ Synopsis:    The extensible OCaml IRC bot
 Authors:     Si Beaumont
 License:     ISC
 Plugins:     META (0.4), DevFiles (0.4)
-BuildTools:  atdgen
+BuildTools:  ocamlbuild, atdgen
 
 PreBuildCommand:  atdgen -t src/config.atd; \
                   atdgen -j src/config.atd; \
@@ -15,6 +15,7 @@ PreCleanCommand:  atdgen -list src/config.atd | xargs rm -rf
 Executable albot
   CompiledObject:   best
   Path:             src
-  BuildTools:       ocamlbuild
   MainIs:           albot.ml
   BuildDepends:     lwt, irc-client.lwt, atdgen
+  ByteOpt:          -bin-annot
+  NativeOpt:        -bin-annot
