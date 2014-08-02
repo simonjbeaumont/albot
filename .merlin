@@ -1,0 +1,6 @@
+PRJ albot
+S src
+B _build/src
+PKG lwt
+PKG irc-client.lwt
+PKG atdgen
