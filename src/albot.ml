@@ -1,6 +1,8 @@
 module Irc = Irc_client_lwt.Client
 open Lwt
 
+let plugins = ref []
+
 let string_of_message {Irc_message.prefix; command; params; trail} =
   let string_of_string_opt = function Some s -> s | None -> "None" in
   let string_of_string_list l = Printf.sprintf "[%s]" (String.concat "; " l) in
@@ -11,14 +13,25 @@ let callback ~connection ~result =
   let open Irc_message in
   match result with
   | Message contents ->
-    Lwt_io.printlf "Received a message: %s" (string_of_message contents)
+    Lwt_io.printlf "Received a message: %s" (string_of_message contents) >>= fun () ->
+    List.filter (fun (module P : Plugin.S) -> P.rule contents) !plugins |>
+    Lwt_list.iter_p
+      (fun (module P : Plugin.S) ->
+        Lwt_io.printlf "Firing plugin %s" P.name >>= fun () ->
+        P.run ~connection ~message:contents |> return)
   | Parse_error (message, error) ->
     Lwt_io.printlf "Couldn't parse \"%s\": %s" message error
 
 let dump_conf c = Lwt_io.printlf "Running with config: %s" (Config.string_of c)
 
+let load_plugin p =
+  let module P = (val p : Plugin.S) in
+  Lwt_io.printlf "Loaded plugin %s" P.name >>= fun () ->
+  return (plugins := p :: !plugins)
+
 let start config =
   dump_conf config >>= fun () ->
+  load_plugin (module Logger : Plugin.S) >>= fun () ->
   let {Config_t.server; port; username; password; channel; nick; realname} =
     config
   in

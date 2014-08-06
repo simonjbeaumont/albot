@@ -12,10 +12,18 @@ PreBuildCommand:  atdgen -t src/config.atd; \
                   atdgen -v src/config.atd;
 PreCleanCommand:  atdgen -list src/config.atd | xargs rm -rf
 
-Executable albot
-  CompiledObject:   best
-  Path:             src
-  MainIs:           main.ml
-  BuildDepends:     lwt, irc-client.lwt, atdgen, cmdliner
+Library albot_plugins
+  Path:             plugins
+  Modules:          Plugin
+  BuildDepends:     irc-client.lwt
   ByteOpt:          -bin-annot
   NativeOpt:        -bin-annot
+  CompiledObject:   best
+
+Executable albot
+  Path:             src
+  MainIs:           main.ml
+  BuildDepends:     albot_plugins, lwt, irc-client.lwt, atdgen, cmdliner
+  ByteOpt:          -bin-annot
+  NativeOpt:        -bin-annot
+  CompiledObject:   best
