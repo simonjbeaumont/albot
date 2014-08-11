@@ -1,3 +1,5 @@
+open Lwt
+
 let logfile = Filename.concat (Sys.getcwd ()) "chat.log"
 
 let time () =
@@ -27,6 +29,9 @@ let with_append_file f =
 let name = "Logger"
 let rule m = m.Irc_message.command = "PRIVMSG"
 let run ~connection ~message =
-  with_append_file (fun c ->
-    Printf.fprintf c "%s\t%s\n%!" (time ()) (string_of_message message)
+  let open Lwt_io in
+  Printf.printf "1";
+  with_file ~flags:Unix.([O_APPEND; O_CREAT]) ~mode:Output logfile (fun c ->
+  Printf.printf "2";
+    fprintf c "%s\t%s\n%!" (time ()) (string_of_message message) >>= flush_all
   )

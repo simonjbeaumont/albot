@@ -18,7 +18,7 @@ let callback ~connection ~result =
     Lwt_list.iter_p
       (fun (module P : Plugin.S) ->
         Lwt_io.printlf "Firing plugin %s" P.name >>= fun () ->
-        P.run ~connection ~message:contents |> return)
+        P.run ~connection ~message:contents)
   | Parse_error (message, error) ->
     Lwt_io.printlf "Couldn't parse \"%s\": %s" message error
 
