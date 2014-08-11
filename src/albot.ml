@@ -32,6 +32,7 @@ let load_plugin p =
 let start config =
   dump_conf config >>= fun () ->
   load_plugin (module Logger : Plugin.S) >>= fun () ->
+  load_plugin (module Jira : Plugin.S) >>= fun () ->
   let {Config_t.server; port; username; password; channel; nick; realname} =
     config
   in
