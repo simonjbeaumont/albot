@@ -1,7 +1,8 @@
 module Irc = Irc_client_lwt.Client
 open Lwt
 
-let plugins = ref []
+let available_plugins = [(module Logger : Plugin.S); (module Jira)]
+let active_plugins = ref []
 
 let string_of_message {Irc_message.prefix; command; params; trail} =
   let string_of_string_opt = function Some s -> s | None -> "None" in
@@ -14,7 +15,7 @@ let callback ~connection ~result =
   match result with
   | Message contents ->
     Lwt_io.printlf "Received a message: %s" (string_of_message contents) >>= fun () ->
-    List.filter (fun (module P : Plugin.S) -> P.rule contents) !plugins |>
+    List.filter (fun (module P : Plugin.S) -> P.rule contents) !active_plugins |>
     Lwt_list.iter_p
       (fun (module P : Plugin.S) ->
         Lwt_io.printlf "Firing plugin %s" P.name >>= fun () ->
@@ -27,12 +28,13 @@ let dump_conf c = Lwt_io.printlf "Running with config: %s" (Config.string_of c)
 let load_plugin p =
   let module P = (val p : Plugin.S) in
   Lwt_io.printlf "Loaded plugin %s" P.name >>= fun () ->
-  return (plugins := p :: !plugins)
+  return (active_plugins := p :: !active_plugins)
 
 let start config =
   dump_conf config >>= fun () ->
-  load_plugin (module Logger : Plugin.S) >>= fun () ->
-  load_plugin (module Jira : Plugin.S) >>= fun () ->
+  let plugins = match config.Config_t.plugins with Some ps -> ps | None -> [] in
+  List.filter (fun (module P : Plugin.S) -> List.mem P.name plugins) available_plugins |>
+  Lwt_list.iter_s load_plugin >>= fun () ->
   let {Config_t.server; port; username; password; channel; nick; realname} =
     config
   in

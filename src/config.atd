@@ -6,4 +6,5 @@ type config = {
   channel: string;
   nick: string;
   realname: string;
+  ?plugins: string list option;
 }
