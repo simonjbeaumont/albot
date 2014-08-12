@@ -18,14 +18,6 @@ let string_of_message {Irc_message.prefix; command; params; trail} =
     (string_of_string_opt prefix |> nick_of_prefix)
     (string_of_string_opt trail)
 
-let with_append_file f =
-  let c = open_out_gen [Open_append; Open_creat; Open_text] 0o644 logfile in
-  try
-    f c;
-    close_out c
-  with _ ->
-    close_out_noerr c
-
 let name = "Logger"
 let rule m = m.Irc_message.command = "PRIVMSG"
 let run ~connection ~message =
