@@ -2,7 +2,7 @@ open Lwt
 module Irc = Irc_client_lwt.Client
 
 let ticket_re =
-  let projs = ["CA"; "CP"; "SCTX"; "XOP"; "CAR"; "WP"] in
+  let projs = ["CA"; "CP"; "SCTX"; "XOP"; "CAR"; "WP"; "HFX"] in
   let patt = Printf.sprintf "\\(%s\\)-[0-9]+" (String.concat "\\|" projs) in
   Re.compile (Re_emacs.re ~case:false patt)
 
