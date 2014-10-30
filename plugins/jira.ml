@@ -1,16 +1,21 @@
 open Lwt
 module Irc = Irc_client_lwt.Client
 
+let find_all_matches re s =
+  let rec aux acc pos =
+    let open Re in
+    match try exec ~pos re s |> get_all_ofs |> Array.to_list with _ -> [] with
+    | [] -> acc
+    | (i, j)::_ -> aux ((String.sub s i (j-i))::acc) j
+  in
+  aux [] 0 |> List.rev
+
 let ticket_re =
   let projs = ["CA"; "CP"; "SCTX"; "XOP"; "CAR"; "WP"; "HFX"] in
   let patt = Printf.sprintf "\\(%s\\)-[0-9]+" (String.concat "\\|" projs) in
   Re.compile (Re_emacs.re ~case:false patt)
 
-let extract_ticket s =
-  try
-    let subs = Re.exec ticket_re s in
-    Some (Re.get subs 0)
-  with Not_found -> None
+let extract_tickets = find_all_matches ticket_re
 
 let jira_hostname = "issues.citrite.net"
 
@@ -66,12 +71,11 @@ let run ~connection ~message =
   match message.Irc_message.trail with
   | None -> return ()
   | Some msg ->
-    match extract_ticket msg with
-    | Some ticket ->
-      reply_of_key ticket >>= fun reply ->
+    let tickets = extract_tickets msg in
+    Lwt_list.map_p reply_of_key tickets >>=
+    Lwt_list.iter_p (fun reply ->
       let channels = message.Irc_message.params in
       Lwt_list.iter_p (fun c ->
         Irc.send_privmsg ~connection ~target:c ~message:reply
       ) channels
-    | None -> return ()
-
+    )
