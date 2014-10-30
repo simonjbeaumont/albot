@@ -15,7 +15,7 @@ PreCleanCommand:  atdgen -list src/config.atd | xargs rm -rf
 Library albot_plugins
   Path:             plugins
   Modules:          Plugin
-  BuildDepends:     irc-client.lwt, re, re.emacs
+  BuildDepends:     irc-client.lwt, re, re.emacs, uri, cohttp.lwt, yojson
   ByteOpt:          -bin-annot
   NativeOpt:        -bin-annot
   CompiledObject:   best
