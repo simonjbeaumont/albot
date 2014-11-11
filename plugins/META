@@ -1,8 +1,8 @@
 # OASIS_START
-# DO NOT EDIT (digest: 149b239d624415d8797e869e216661b9)
+# DO NOT EDIT (digest: d11d7b6cff72fff0eaf565982bef025e)
 version = "0.0.0"
 description = "The extensible OCaml IRC bot"
-requires = "irc-client.lwt re re.emacs uri cohttp.lwt yojson"
+requires = "irc-client.lwt re re.emacs uri cohttp.lwt yojson github.unix"
 archive(byte) = "albot_plugins.cma"
 archive(byte, plugin) = "albot_plugins.cma"
 archive(native) = "albot_plugins.cmxa"

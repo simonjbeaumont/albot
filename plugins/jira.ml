@@ -58,7 +58,9 @@ let reply_of_key key =
   let uri = rest_uri_of_key key in
   Cohttp_lwt_unix.Client.get uri >>= fun (_, body) ->
   Cohttp_lwt_body.to_string body >>= fun s ->
-  ticket_of_json s |> pretty_string_of_ticket |> return
+  try
+    ticket_of_json s |> pretty_string_of_ticket |> return
+  with _ -> Printf.sprintf "Couldn't find ticket: %s" key |> return
 
 let name = "JIRA linker"
 

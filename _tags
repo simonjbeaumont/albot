@@ -1,8 +1,9 @@
 # OASIS_START
-# DO NOT EDIT (digest: 4082a855176d2d05e05d93711df06c62)
+# DO NOT EDIT (digest: 05906c48f019202862c23ebb9f523a02)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
+true: annot, bin_annot
 <**/.svn>: -traverse
 <**/.svn>: not_hygienic
 ".bzr": -traverse
@@ -16,23 +17,25 @@
 # Library albot_plugins
 "plugins/albot_plugins.cmxs": use_albot_plugins
 <plugins/albot_plugins.{cma,cmxa}>: oasis_library_albot_plugins_byte
-<plugins/*.ml{,i}>: oasis_library_albot_plugins_byte
+<plugins/*.ml{,i,y}>: oasis_library_albot_plugins_byte
 <plugins/albot_plugins.{cma,cmxa}>: oasis_library_albot_plugins_native
-<plugins/*.ml{,i}>: oasis_library_albot_plugins_native
-<plugins/*.ml{,i}>: pkg_cohttp.lwt
-<plugins/*.ml{,i}>: pkg_irc-client.lwt
-<plugins/*.ml{,i}>: pkg_re
-<plugins/*.ml{,i}>: pkg_re.emacs
-<plugins/*.ml{,i}>: pkg_uri
-<plugins/*.ml{,i}>: pkg_yojson
+<plugins/*.ml{,i,y}>: oasis_library_albot_plugins_native
+<plugins/*.ml{,i,y}>: pkg_cohttp.lwt
+<plugins/*.ml{,i,y}>: pkg_github.unix
+<plugins/*.ml{,i,y}>: pkg_irc-client.lwt
+<plugins/*.ml{,i,y}>: pkg_re
+<plugins/*.ml{,i,y}>: pkg_re.emacs
+<plugins/*.ml{,i,y}>: pkg_uri
+<plugins/*.ml{,i,y}>: pkg_yojson
 # Executable albot
 <src/main.{native,byte}>: oasis_executable_albot_byte
-<src/*.ml{,i}>: oasis_executable_albot_byte
+<src/*.ml{,i,y}>: oasis_executable_albot_byte
 <src/main.{native,byte}>: oasis_executable_albot_native
-<src/*.ml{,i}>: oasis_executable_albot_native
+<src/*.ml{,i,y}>: oasis_executable_albot_native
 <src/main.{native,byte}>: pkg_atdgen
 <src/main.{native,byte}>: pkg_cmdliner
 <src/main.{native,byte}>: pkg_cohttp.lwt
+<src/main.{native,byte}>: pkg_github.unix
 <src/main.{native,byte}>: pkg_irc-client.lwt
 <src/main.{native,byte}>: pkg_lwt
 <src/main.{native,byte}>: pkg_re
@@ -40,14 +43,15 @@
 <src/main.{native,byte}>: pkg_uri
 <src/main.{native,byte}>: pkg_yojson
 <src/main.{native,byte}>: use_albot_plugins
-<src/*.ml{,i}>: pkg_atdgen
-<src/*.ml{,i}>: pkg_cmdliner
-<src/*.ml{,i}>: pkg_cohttp.lwt
-<src/*.ml{,i}>: pkg_irc-client.lwt
-<src/*.ml{,i}>: pkg_lwt
-<src/*.ml{,i}>: pkg_re
-<src/*.ml{,i}>: pkg_re.emacs
-<src/*.ml{,i}>: pkg_uri
-<src/*.ml{,i}>: pkg_yojson
-<src/*.ml{,i}>: use_albot_plugins
+<src/*.ml{,i,y}>: pkg_atdgen
+<src/*.ml{,i,y}>: pkg_cmdliner
+<src/*.ml{,i,y}>: pkg_cohttp.lwt
+<src/*.ml{,i,y}>: pkg_github.unix
+<src/*.ml{,i,y}>: pkg_irc-client.lwt
+<src/*.ml{,i,y}>: pkg_lwt
+<src/*.ml{,i,y}>: pkg_re
+<src/*.ml{,i,y}>: pkg_re.emacs
+<src/*.ml{,i,y}>: pkg_uri
+<src/*.ml{,i,y}>: pkg_yojson
+<src/*.ml{,i,y}>: use_albot_plugins
 # OASIS_STOP

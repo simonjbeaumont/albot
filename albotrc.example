@@ -5,5 +5,5 @@
   "channel": "#albot",
   "nick": "albot_",
   "realname": "Albot, the friendly OCaml IRC bot",
-  "plugins": ["Logger", "JIRA linker"]
+  "plugins": ["Logger", "JIRA linker", "Pull request linker"]
 }

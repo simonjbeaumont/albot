@@ -1,7 +1,7 @@
 module Irc = Irc_client_lwt.Client
 open Lwt
 
-let available_plugins = [(module Logger : Plugin.S); (module Jira)]
+let available_plugins = [(module Logger : Plugin.S); (module Jira); (module Gh)]
 let active_plugins = ref []
 
 let string_of_message {Irc_message.prefix; command; params; trail} =
