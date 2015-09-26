@@ -1,5 +1,5 @@
 open Lwt
-module Irc = Irc_client_lwt.Client
+module Irc = Irc_client_lwt
 
 type key = {
   user : string;
@@ -64,20 +64,17 @@ let reply_of_key key =
 
 let name = "Pull request linker"
 
-let rule m = m.Irc_message.command = "PRIVMSG" &&
-  match m.Irc_message.trail with
-  | Some msg -> Re.execp pullreq_re msg
-  | None -> false
+let rule = function
+  | {Irc_message.command = Irc_message.PRIVMSG (_, msg)} ->
+    Re.execp pullreq_re msg
+  | _ -> false
 
 let run ~connection ~message =
-  match message.Irc_message.trail with
-  | None -> return ()
-  | Some msg ->
+  match message.Irc_message.command with
+  | Irc_message.PRIVMSG (channel, msg) ->
     let keys = extract_pullreqs msg in
     List.map reply_of_key keys |>
     Lwt_list.iter_p (fun reply ->
-      let channels = message.Irc_message.params in
-      Lwt_list.iter_p (fun c ->
-        Irc.send_privmsg ~connection ~target:c ~message:reply
-      ) channels
+      Irc.send_privmsg ~connection ~target:channel ~message:reply
     )
+  | _ -> return ()

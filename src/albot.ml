@@ -1,27 +1,21 @@
-module Irc = Irc_client_lwt.Client
+module Irc = Irc_client_lwt
 open Lwt
 
 let available_plugins = [(module Logger : Plugin.S); (module Jira); (module Gh)]
 let active_plugins = ref []
 
-let string_of_message {Irc_message.prefix; command; params; trail} =
-  let string_of_string_opt = function Some s -> s | None -> "None" in
-  let string_of_string_list l = Printf.sprintf "[%s]" (String.concat "; " l) in
-  Printf.sprintf "%s %s %s %s" (string_of_string_opt prefix) command
-    (string_of_string_list params) (string_of_string_opt trail)
-
-let callback ~connection ~result =
+let callback connection result =
   let open Irc_message in
   match result with
-  | Message contents ->
-    Lwt_io.printlf "Received a message: %s" (string_of_message contents) >>= fun () ->
+  | `Ok contents ->
+    Lwt_io.printlf "Received a message: %s" (to_string contents) >>= fun () ->
     List.filter (fun (module P : Plugin.S) -> P.rule contents) !active_plugins |>
     Lwt_list.iter_p
       (fun (module P : Plugin.S) ->
         Lwt_io.printlf "Firing plugin %s" P.name >>= fun () ->
         P.run ~connection ~message:contents)
-  | Parse_error (message, error) ->
-    Lwt_io.printlf "Couldn't parse \"%s\": %s" message error
+  | `Error error ->
+    Lwt_io.printlf "Couldn't parse message: %s" error
 
 let dump_conf c = Lwt_io.printlf "Running with config: %s" (Config.string_of c)
 
