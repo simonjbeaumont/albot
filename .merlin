@@ -1,6 +1,8 @@
 PRJ albot
 S src
 B _build/src
+PKG github.unix
 PKG lwt
 PKG irc-client.lwt
+PKG re
 PKG atdgen
