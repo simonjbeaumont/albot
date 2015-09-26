@@ -1,4 +1,4 @@
-module Irc = Irc_client_lwt.Client
+module Irc = Irc_client_lwt
 
 module type S = sig
   val name : string
